@@ -1,0 +1,25 @@
+---
+name: {{SKILL_NAME}}
+description: {{DESCRIPTION}}
+version: 0.1.0
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - {{REQUIRED_TOOL_1}}
+      primaryEnv: {{ENVIRONMENT}}
+    emoji: "{{EMOJI}}"
+    homepage: {{PROJECT_URL}}
+---
+
+# {{SKILL_TITLE}}
+
+## 技能概述
+本技能帮助{{TARGET_USER}}完成{{CORE_FUNCTION}}
+
+## 使用流程
+1. {{STEP_1}}
+2. {{STEP_2}}
+
+## AI 助手能力
+- {{AI_CAPABILITY_1}}
