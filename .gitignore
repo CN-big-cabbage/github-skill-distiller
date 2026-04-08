@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Temp files
+*.tmp
+*.bak
+
+# Test outputs
+test-output/
