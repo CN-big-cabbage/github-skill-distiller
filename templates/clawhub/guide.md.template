@@ -1,0 +1,46 @@
+# {{GUIDE_TITLE}}
+
+**适用场景**: {{SCENARIO}}
+
+---
+
+## 一、前置条件
+
+### 目标
+{{SECTION_GOAL}}
+
+### 检查环境
+
+**AI执行说明**: AI将自动检查你的系统环境
+
+```bash
+{{CHECK_COMMANDS}}
+```
+
+**期望结果**:
+{{EXPECTED_RESULTS}}
+
+---
+
+## 二、操作步骤
+
+### 步骤1: {{STEP_1_TITLE}}
+
+**AI执行说明**: {{AI_INSTRUCTION}}
+
+```bash
+{{STEP_1_COMMANDS}}
+```
+
+**期望结果**:
+{{STEP_1_EXPECTED}}
+
+---
+
+## 完成确认
+
+### 检查清单
+{{CHECKLIST}}
+
+### 下一步
+{{NEXT_STEP}}
