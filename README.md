@@ -22,66 +22,212 @@
 - **可复用模板**: SKILL.md、指南、故障排查模板开箱即用
 - **参考示例**: 3 个难度梯度的示例项目 + 1 个生产级案例（you-get）
 
-## 安装技能
+## 快速开始
 
-`generate-skill` 是自动生成技能的核心编排器，需要安装到你的 AI 编程工具中才能使用 `/generate-skill` 命令。
+### 第一步：下载项目
 
-### Claude Code
+```bash
+# 方式1: 使用 git clone（推荐）
+git clone https://github.com/CN-big-cabbage/skill-creation-methodology.git
+cd skill-creation-methodology
+
+# 方式2: 使用 GitHub CLI
+gh repo clone CN-big-cabbage/skill-creation-methodology
+cd skill-creation-methodology
+
+# 验证下载成功
+ls -la skills/generate-skill.md
+```
+
+### 第二步：安装技能
+
+根据你使用的 AI 编程工具，选择对应的安装方式：
+
+#### Claude Code 安装
 
 ```bash
 # 项目级安装（仅当前项目可用）
 mkdir -p .claude/commands
 cp skills/generate-skill.md .claude/commands/generate-skill.md
 
-# 全局安装（所有项目可用）
+# 或全局安装（所有项目可用）
 mkdir -p ~/.claude/commands
 cp skills/generate-skill.md ~/.claude/commands/generate-skill.md
+
+# 验证安装
+ls -la .claude/commands/generate-skill.md  # 项目级
+ls -la ~/.claude/commands/generate-skill.md  # 全局
 ```
 
-安装后在 Claude Code 中使用：
-```bash
-/generate-skill https://github.com/user/project
-```
-
-### OpenAI Codex CLI
+#### OpenAI Codex CLI 安装
 
 ```bash
-# 将技能内容追加到项目指令文件
+# 项目级安装
 mkdir -p .codex
 cp skills/generate-skill.md .codex/generate-skill.md
 
-# 或追加到全局指令
+# 或全局安装
 cat skills/generate-skill.md >> ~/.codex/instructions.md
+
+# 验证安装
+cat .codex/generate-skill.md | head -10
 ```
 
-在 Codex 中使用时，直接描述任务即可：
-```
-请按照 generate-skill 的流程，为 https://github.com/user/project 生成技能
-```
-
-### OpenCode
+#### OpenCode 安装
 
 ```bash
-# 将技能复制到 OpenCode 的指令目录
+# 安装到 OpenCode 指令目录
 mkdir -p .opencode/commands
 cp skills/generate-skill.md .opencode/commands/generate-skill.md
+
+# 验证安装
+ls -la .opencode/commands/generate-skill.md
 ```
 
-### Cursor / Windsurf
+#### Cursor / Windsurf 安装
 
 ```bash
-# Cursor：添加到项目规则
+# Cursor 安装
 mkdir -p .cursor/rules
 cp skills/generate-skill.md .cursor/rules/generate-skill.md
 
-# Windsurf：添加到项目规则
+# Windsurf 安装
 mkdir -p .windsurf/rules
 cp skills/generate-skill.md .windsurf/rules/generate-skill.md
+
+# 验证安装
+ls -la .cursor/rules/generate-skill.md
 ```
 
-### 通用方式
+#### 其他 AI 工具
 
-对于其他 AI 编程工具，可以直接将 `skills/generate-skill.md` 的内容作为 prompt 提供给 AI，并配合项目中的脚本使用。
+对于其他工具，直接将 `skills/generate-skill.md` 内容作为 prompt 使用。
+
+### 第三步：使用技能
+
+#### 方式一：自动生成（推荐，5分钟完成）
+
+**在 Claude Code 中**:
+```bash
+# 安装后直接使用命令
+/generate-skill https://github.com/user/project
+
+# 示例：为 you-get 项目生成技能
+/generate-skill https://github.com/soimort/you-get
+```
+
+**在 Codex / OpenCode / Cursor 中**:
+```bash
+# 描述任务并引用技能
+"请按照 generate-skill 的流程，为 https://github.com/user/project 生成技能"
+```
+
+**自动完成流程**:
+```
+项目分析 → AI内容生成 → 质量验证 → 用户确认 → 推送发布
+  1分钟      3分钟        1分钟      交互      1分钟
+```
+
+#### 方式二：手动流程（学习模式，约1小时）
+
+**1. 分析项目**
+```bash
+# 分析 GitHub 项目元数据和结构
+./scripts/analyze-repo.sh https://github.com/user/project /tmp/my-skill
+
+# 查看生成的项目配置
+cat /tmp/my-skill/project-profile.json
+```
+
+**2. 创建技能框架**
+```bash
+# 创建技能目录结构
+./workflows/create-skill.sh my-skill
+
+# 查看生成的框架
+ls -la my-skill/
+```
+
+**3. 编辑内容**
+
+参考 `you-get/` 完整案例：
+```bash
+# 查看示例技能结构
+ls -la you-get/
+
+# 编辑你的技能主文件
+vim my-skill/SKILL.md
+
+# 添加使用指南
+vim my-skill/guides/01-installation.md
+vim my-skill/guides/02-quickstart.md
+
+# 添加故障排查
+vim my-skill/troubleshooting.md
+```
+
+**4. 验证质量**
+```bash
+# 四维质量检查
+./workflows/validate-skill.sh my-skill
+
+# 检查结果
+# ✅ 文件结构完整
+# ✅ frontmatter格式正确
+# ✅ 占位符已替换
+# ✅ 内容质量达标
+```
+
+**5. 发布技能**
+```bash
+# 方式1: 一键推送发布
+./scripts/push-and-publish.sh my-skill
+
+# 方式2: 手动发布到 ClawHub
+clawhub publish ./my-skill \
+  --slug my-skill \
+  --name "My Skill" \
+  --version "1.0.0" \
+  --changelog "Initial release"
+
+# 方式3: 发布到 GitHub
+cd my-skill
+git init
+git add .
+git commit -m "feat: add my-skill"
+git remote add origin git@github.com:USER/my-skill.git
+git push -u origin main
+gh release create v1.0.0
+```
+
+### 第四步：安装生成的技能（可选）
+
+生成技能后，用户可以这样安装使用：
+
+```bash
+# 从 ClawHub 安装
+clawhub install my-skill
+
+# 从 GitHub 克隆
+git clone https://github.com/user/my-skill.git
+
+# 查看技能文档
+cat my-skill/SKILL.md
+```
+
+### 验证安装成功
+
+```bash
+# 测试技能生成
+/generate-skill https://github.com/soimort/you-get
+
+# 预期输出：
+# ✓ 项目分析完成
+# ✓ 技能框架创建成功
+# ✓ 内容生成完成
+# ✓ 质量验证通过
+# ✓ 发布成功
+```
 
 ## 项目结构
 
@@ -127,54 +273,6 @@ skill-creation-methodology/
     ├── skill-quality-metrics.md     # 质量指标
     └── common-patterns.md           # 常见设计模式
 ```
-
-## 快速开始
-
-### 方式一：自动生成（推荐）
-
-安装技能后（参见 [安装技能](#安装技能)），一条命令完成全流程：
-
-```bash
-/generate-skill https://github.com/user/project
-```
-
-自动完成：项目分析 → AI 内容生成 → 质量验证 → 用户确认 → 推送发布
-
-### 方式二：手动流程
-
-#### 1. 分析项目（1 分钟）
-
-```bash
-./scripts/analyze-repo.sh https://github.com/user/project /tmp/my-skill
-```
-
-输出 `project-profile.json`，包含项目元数据和结构信息。
-
-#### 2. 创建框架（1 分钟）
-
-```bash
-./workflows/create-skill.sh my-skill
-```
-
-#### 3. 填充内容（3-4 小时）
-
-参考 `you-get/` 目录的完整案例，编辑生成的模板文件。
-
-#### 4. 验证质量（1 分钟）
-
-```bash
-./workflows/validate-skill.sh my-skill
-```
-
-四维检查：文件结构 → frontmatter → 占位符 → 内容质量
-
-#### 5. 推送发布（1 分钟）
-
-```bash
-./scripts/push-and-publish.sh my-skill
-```
-
-自动创建 GitHub 仓库并推送，ClawHub CLI 可用时同步发布。
 
 ## 核心价值
 
