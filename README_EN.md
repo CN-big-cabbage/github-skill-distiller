@@ -17,15 +17,77 @@ Core concept: **Given a GitHub URL, automatically analyze the project, generate 
 - **AI-Driven Content Generation**: Generates SKILL.md, guides, and troubleshooting docs based on project documentation
 - **Automated Validation**: Four-dimensional checks — file structure, frontmatter, placeholders, and content quality
 - **Dual-Platform Publishing**: Supports ClawHub + GitHub Marketplace
+- **Multi-Tool Compatible**: Works with Claude Code, Codex, OpenCode, and other AI coding tools
 - **Complete Methodology**: 8 core documents covering the full lifecycle from research to maintenance
 - **Reusable Templates**: Ready-to-use templates for SKILL.md, guides, and troubleshooting
 - **Reference Examples**: 3 graduated example projects + 1 production-grade case study (you-get)
+
+## Install the Skill
+
+`generate-skill` is the core orchestrator for automatic skill generation. Install it into your AI coding tool to use the `/generate-skill` command.
+
+### Claude Code
+
+```bash
+# Project-level installation (current project only)
+mkdir -p .claude/commands
+cp skills/generate-skill.md .claude/commands/generate-skill.md
+
+# Global installation (available in all projects)
+mkdir -p ~/.claude/commands
+cp skills/generate-skill.md ~/.claude/commands/generate-skill.md
+```
+
+After installation, use in Claude Code:
+```bash
+/generate-skill https://github.com/user/project
+```
+
+### OpenAI Codex CLI
+
+```bash
+# Copy the skill to the Codex instructions directory
+mkdir -p .codex
+cp skills/generate-skill.md .codex/generate-skill.md
+
+# Or append to global instructions
+cat skills/generate-skill.md >> ~/.codex/instructions.md
+```
+
+In Codex, describe the task directly:
+```
+Follow the generate-skill workflow to create a skill for https://github.com/user/project
+```
+
+### OpenCode
+
+```bash
+# Copy the skill to OpenCode's commands directory
+mkdir -p .opencode/commands
+cp skills/generate-skill.md .opencode/commands/generate-skill.md
+```
+
+### Cursor / Windsurf
+
+```bash
+# Cursor: Add to project rules
+mkdir -p .cursor/rules
+cp skills/generate-skill.md .cursor/rules/generate-skill.md
+
+# Windsurf: Add to project rules
+mkdir -p .windsurf/rules
+cp skills/generate-skill.md .windsurf/rules/generate-skill.md
+```
+
+### Generic Approach
+
+For other AI coding tools, you can directly provide the content of `skills/generate-skill.md` as a prompt to the AI, and use it together with the project scripts.
 
 ## Project Structure
 
 ```
 skill-creation-methodology/
-├── skills/                          # Claude Code Skills
+├── skills/                          # AI Skill Files
 │   └── generate-skill.md            # Core: auto skill generation orchestrator
 ├── scripts/                         # Automation scripts
 │   ├── analyze-repo.sh              # GitHub project analysis (metadata + structure scan)
@@ -70,7 +132,7 @@ skill-creation-methodology/
 
 ### Option 1: Auto-Generate (Recommended)
 
-After installing the `generate-skill` skill in Claude Code, complete the entire flow with one command:
+After installing the skill (see [Install the Skill](#install-the-skill)), complete the entire flow with one command:
 
 ```bash
 /generate-skill https://github.com/user/project
@@ -123,6 +185,16 @@ Automatically creates a GitHub repository and pushes code. Publishes to ClawHub 
 | Quality Assurance | Automated validation | Manual checks |
 | Platform Coverage | Dual-platform templates | Single-platform |
 | Content Generation | AI-powered | Manual writing |
+
+## Compatible Tools
+
+| Tool | Installation | Usage |
+|------|-------------|-------|
+| [Claude Code](https://claude.ai/claude-code) | `.claude/commands/` | `/generate-skill <url>` |
+| [OpenAI Codex CLI](https://github.com/openai/codex) | `.codex/` | Describe task + reference prompt |
+| [OpenCode](https://github.com/opencode-ai/opencode) | `.opencode/commands/` | Describe task + reference prompt |
+| [Cursor](https://cursor.com) | `.cursor/rules/` | Describe task + reference rule |
+| [Windsurf](https://windsurf.com) | `.windsurf/rules/` | Describe task + reference rule |
 
 ## Use Cases
 

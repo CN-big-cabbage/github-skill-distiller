@@ -17,15 +17,77 @@
 - **AI 驱动内容生成**: 基于项目文档智能生成 SKILL.md、使用指南、故障排查
 - **自动化验证**: 文件结构、frontmatter、占位符、内容质量四维检查
 - **双平台发布**: 支持 ClawHub + GitHub Marketplace
+- **多工具兼容**: 支持 Claude Code、Codex、OpenCode 等主流 AI 编程工具
 - **完整方法论**: 8 个核心文档覆盖从调研到维护的全生命周期
 - **可复用模板**: SKILL.md、指南、故障排查模板开箱即用
 - **参考示例**: 3 个难度梯度的示例项目 + 1 个生产级案例（you-get）
+
+## 安装技能
+
+`generate-skill` 是自动生成技能的核心编排器，需要安装到你的 AI 编程工具中才能使用 `/generate-skill` 命令。
+
+### Claude Code
+
+```bash
+# 项目级安装（仅当前项目可用）
+mkdir -p .claude/commands
+cp skills/generate-skill.md .claude/commands/generate-skill.md
+
+# 全局安装（所有项目可用）
+mkdir -p ~/.claude/commands
+cp skills/generate-skill.md ~/.claude/commands/generate-skill.md
+```
+
+安装后在 Claude Code 中使用：
+```bash
+/generate-skill https://github.com/user/project
+```
+
+### OpenAI Codex CLI
+
+```bash
+# 将技能内容追加到项目指令文件
+mkdir -p .codex
+cp skills/generate-skill.md .codex/generate-skill.md
+
+# 或追加到全局指令
+cat skills/generate-skill.md >> ~/.codex/instructions.md
+```
+
+在 Codex 中使用时，直接描述任务即可：
+```
+请按照 generate-skill 的流程，为 https://github.com/user/project 生成技能
+```
+
+### OpenCode
+
+```bash
+# 将技能复制到 OpenCode 的指令目录
+mkdir -p .opencode/commands
+cp skills/generate-skill.md .opencode/commands/generate-skill.md
+```
+
+### Cursor / Windsurf
+
+```bash
+# Cursor：添加到项目规则
+mkdir -p .cursor/rules
+cp skills/generate-skill.md .cursor/rules/generate-skill.md
+
+# Windsurf：添加到项目规则
+mkdir -p .windsurf/rules
+cp skills/generate-skill.md .windsurf/rules/generate-skill.md
+```
+
+### 通用方式
+
+对于其他 AI 编程工具，可以直接将 `skills/generate-skill.md` 的内容作为 prompt 提供给 AI，并配合项目中的脚本使用。
 
 ## 项目结构
 
 ```
 skill-creation-methodology/
-├── skills/                          # Claude Code Skills
+├── skills/                          # AI 技能文件
 │   └── generate-skill.md            # 核心：自动技能生成编排器
 ├── scripts/                         # 自动化脚本
 │   ├── analyze-repo.sh              # GitHub 项目分析（元数据 + 结构扫描）
@@ -70,7 +132,7 @@ skill-creation-methodology/
 
 ### 方式一：自动生成（推荐）
 
-在 Claude Code 中安装 `generate-skill` 技能后，一条命令完成全流程：
+安装技能后（参见 [安装技能](#安装技能)），一条命令完成全流程：
 
 ```bash
 /generate-skill https://github.com/user/project
@@ -123,6 +185,16 @@ skill-creation-methodology/
 | 质量保证 | 自动化验证 | 手动验证 |
 | 平台覆盖 | 双平台模板 | 单平台经验 |
 | 内容生成 | AI 智能生成 | 手动编写 |
+
+## 兼容工具
+
+| 工具 | 安装方式 | 使用方式 |
+|------|---------|---------|
+| [Claude Code](https://claude.ai/claude-code) | `.claude/commands/` | `/generate-skill <url>` |
+| [OpenAI Codex CLI](https://github.com/openai/codex) | `.codex/` | 描述任务 + 引用 prompt |
+| [OpenCode](https://github.com/opencode-ai/opencode) | `.opencode/commands/` | 描述任务 + 引用 prompt |
+| [Cursor](https://cursor.com) | `.cursor/rules/` | 描述任务 + 引用规则 |
+| [Windsurf](https://windsurf.com) | `.windsurf/rules/` | 描述任务 + 引用规则 |
 
 ## 适用场景
 
