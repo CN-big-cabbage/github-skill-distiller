@@ -62,7 +62,7 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 #### 2.1 生成 SKILL.md
 
-参考 `you-get/SKILL.md` 的质量标准，生成包含以下内容的 SKILL.md：
+参考 `cases/you-get/SKILL.md` 的质量标准，生成包含以下内容的 SKILL.md：
 
 - **frontmatter**: name, description, version(0.1.0), metadata(openclaw requires, emoji, homepage)
 - **技能概述**: 说明技能帮助谁完成什么，列出 3-5 个核心场景
@@ -139,7 +139,7 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 ## 质量标准
 
-参考项目中 `you-get/` 目录的技能质量：
+参考项目中 `cases/you-get/` 目录的技能质量：
 - SKILL.md: 80+ 行，内容充实
 - guides/: 每个文件 100+ 行，包含具体命令和期望输出
 - troubleshooting.md: 200+ 行，问题覆盖全面

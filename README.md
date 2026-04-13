@@ -173,10 +173,10 @@ ls -la my-skill/
 
 **3. 编辑内容（注入能力精华）**
 
-参考 `you-get/` 完整案例：
+参考 `cases/you-get/` 完整案例：
 ```bash
 # 查看已蒸馏的技能示例
-ls -la you-get/
+ls -la cases/you-get/
 
 # 编辑你的技能主文件
 vim my-skill/SKILL.md
@@ -284,11 +284,13 @@ github-skill-distiller/             # GitHub Skill Distiller
 │   ├── hello-world/                  # 入门级蒸馏
 │   ├── data-processor/               # 中级蒸馏
 │   └── kubeasz-deploy/               # 生产级蒸馏
-├── you-get/                          # 蒸馏成果案例
-│   ├── SKILL.md                      # 蒸馏后的技能主文件
-│   ├── guides/                       # 使用指南
-│   ├── troubleshooting.md           # 故障排查
-│   └── configs/                      # 配置示例
+├── cases/                            # 蒸馏成果案例
+│   ├── you-get/                      # CLI工具案例（you-get）
+│   │   ├── SKILL.md                  # 蒸馏后的技能主文件
+│   │   ├── guides/                   # 使用指南
+│   │   ├── troubleshooting.md       # 故障排查
+│   │   └── configs/                  # 配置示例
+│   └── paper-checking/               # Web应用案例（论文查重）
 ├── checklists/                       # 检查清单
 │   └── pre-creation-checklist.md    # 蒸馏前评估
 └── resources/                        # 参考资料
