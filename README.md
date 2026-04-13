@@ -252,7 +252,16 @@ cat my-skill/SKILL.md
 # ✓ 发布成功（输出蒸馏成果）
 ```
 
-## 蒸馏成果展示
+## 案例展示
+
+| 项目 | 类型 | Stars | 技能链接 |
+|------|------|-------|---------|
+| [you-get](https://github.com/soimort/you-get) | CLI 工具 | 50k+ | [cases/you-get](cases/you-get/) |
+| [paper-checking](https://github.com/CN-big-cabbage/paper-checking) | Web 应用 | - | [cases/paper-checking](cases/paper-checking/) |
+
+> 更多案例持续添加中...使用 `/generate-skill <github-url>` 生成你自己的技能！
+
+## 项目结构
 
 ```
 github-skill-distiller/             # GitHub Skill Distiller
