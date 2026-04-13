@@ -66,6 +66,70 @@ elif [ -f "$CLONE_DIR/Cargo.toml" ]; then
     REQUIRED_BINS=$(echo '["cargo"]' | jq '.')
 fi
 
+# 检测项目类型
+detect_project_type() {
+    local dir="$1"
+
+    # CLI 工具检测
+    if [ -f "$dir/setup.py" ] && grep -q "entry_points\|console_scripts" "$dir/setup.py" 2>/dev/null; then
+        echo "cli"
+        return
+    fi
+    if [ -f "$dir/pyproject.toml" ] && grep -q "scripts\|console_scripts" "$dir/pyproject.toml" 2>/dev/null; then
+        echo "cli"
+        return
+    fi
+    if [ -f "$dir/package.json" ] && jq -e '.bin' "$dir/package.json" &>/dev/null; then
+        echo "cli"
+        return
+    fi
+    if [ -f "$dir/main.go" ] || ([ -d "$dir/cmd" ] && [ -f "$dir/go.mod" ]); then
+        echo "cli"
+        return
+    fi
+
+    # 框架检测
+    if [ -f "$dir/setup.py" ] && grep -qE "middleware|plugin|extension|blueprint" "$dir/setup.py" 2>/dev/null; then
+        echo "framework"
+        return
+    fi
+    if [ -f "$dir/package.json" ] && jq -e '.keywords[]? | select(test("framework|middleware|plugin"))' "$dir/package.json" &>/dev/null; then
+        echo "framework"
+        return
+    fi
+
+    # DevOps 工具检测
+    if ls "$dir"/*.yml "$dir"/*.yaml 2>/dev/null | head -1 | xargs grep -lq "ansible\|playbook\|tasks:" 2>/dev/null; then
+        echo "devops"
+        return
+    fi
+    if [ -f "$dir/Dockerfile" ] && [ -f "$dir/docker-compose.yml" -o -f "$dir/docker-compose.yaml" ]; then
+        echo "webapp"
+        return
+    fi
+    if ls "$dir"/*.tf 2>/dev/null | head -1 &>/dev/null || [ -d "$dir/roles" ]; then
+        echo "devops"
+        return
+    fi
+
+    # Web 应用检测
+    if [ -d "$dir/src" ] && ([ -d "$dir/public" ] || [ -d "$dir/static" ] || [ -d "$dir/templates" ]); then
+        echo "webapp"
+        return
+    fi
+
+    # 库（默认）
+    if [ -f "$dir/setup.py" ] || [ -f "$dir/pyproject.toml" ] || [ -f "$dir/package.json" ] || [ -f "$dir/go.mod" ] || [ -f "$dir/Cargo.toml" ]; then
+        echo "library"
+        return
+    fi
+
+    echo "unknown"
+}
+
+PROJECT_TYPE=$(detect_project_type "$CLONE_DIR")
+echo "  Type: $PROJECT_TYPE"
+
 # 4. 输出 profile
 echo "[4/4] 生成 project-profile.json..."
 PROFILE="$OUTPUT_DIR/project-profile.json"
@@ -85,6 +149,7 @@ cat > "$PROFILE" <<ENDJSON
   "has_docs": $HAS_DOCS,
   "doc_files": $DOC_FILES,
   "required_bins": $REQUIRED_BINS,
+  "project_type": "$PROJECT_TYPE",
   "clone_dir": "$CLONE_DIR",
   "analyzed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
