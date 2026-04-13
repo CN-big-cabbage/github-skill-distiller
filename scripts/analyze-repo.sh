@@ -75,6 +75,10 @@ detect_project_type() {
         echo "cli"
         return
     fi
+    if [ -f "$dir/setup.cfg" ] && grep -q "entry_points\|console_scripts" "$dir/setup.cfg" 2>/dev/null; then
+        echo "cli"
+        return
+    fi
     if [ -f "$dir/pyproject.toml" ] && grep -q "scripts\|console_scripts" "$dir/pyproject.toml" 2>/dev/null; then
         echo "cli"
         return
@@ -107,7 +111,7 @@ detect_project_type() {
         echo "webapp"
         return
     fi
-    if ls "$dir"/*.tf 2>/dev/null | head -1 &>/dev/null || [ -d "$dir/roles" ]; then
+    if ls "$dir"/*.tf &>/dev/null || [ -d "$dir/roles" ]; then
         echo "devops"
         return
     fi
