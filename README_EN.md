@@ -1,4 +1,9 @@
-# Skill Creation Methodology
+# GitHub Skill Distiller
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/CN-big-cabbage/github-skill-distiller?style=social)](https://github.com/CN-big-cabbage/github-skill-distiller)
+[![Skills Generated](https://img.shields.io/badge/Skills_Generated-8-brightgreen)](cases/)
+[![Supported Tools](https://img.shields.io/badge/Supported_Tools-5-blue)](#supported-tools)
 
 [中文](./README.md) | English
 

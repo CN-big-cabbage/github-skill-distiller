@@ -1,5 +1,10 @@
 # GitHub Skill Distiller
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/CN-big-cabbage/github-skill-distiller?style=social)](https://github.com/CN-big-cabbage/github-skill-distiller)
+[![Skills Generated](https://img.shields.io/badge/Skills_Generated-8-brightgreen)](cases/)
+[![Supported Tools](https://img.shields.io/badge/Supported_Tools-5-blue)](#兼容工具)
+
 [English](./README_EN.md) | 中文
 
 **蒸馏 GitHub 项目为 AI Skill 技能并发布到开源社区**
