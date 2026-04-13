@@ -1,0 +1,26 @@
+name: Validate Skills
+
+on:
+  push:
+    paths:
+      - 'cases/**'
+      - 'workflows/validate-skill.sh'
+  pull_request:
+    paths:
+      - 'cases/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate all skill cases
+        run: |
+          FAIL=0
+          for dir in cases/*/; do
+            echo "--- Validating $dir ---"
+            if ! ./workflows/validate-skill.sh "$dir"; then
+              FAIL=1
+            fi
+          done
+          exit $FAIL

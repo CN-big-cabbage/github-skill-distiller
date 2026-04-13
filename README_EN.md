@@ -1,5 +1,6 @@
 # GitHub Skill Distiller
 
+[![Validate Skills](https://github.com/CN-big-cabbage/github-skill-distiller/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/CN-big-cabbage/github-skill-distiller/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/CN-big-cabbage/github-skill-distiller?style=social)](https://github.com/CN-big-cabbage/github-skill-distiller)
 [![Skills Generated](https://img.shields.io/badge/Skills_Generated-8-brightgreen)](cases/)
