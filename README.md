@@ -257,9 +257,15 @@ cat my-skill/SKILL.md
 | 项目 | 类型 | Stars | 技能链接 |
 |------|------|-------|---------|
 | [you-get](https://github.com/soimort/you-get) | CLI 工具 | 50k+ | [cases/you-get](cases/you-get/) |
+| [httpie](https://github.com/httpie/cli) | CLI 工具 | 37k+ | [cases/httpie](cases/httpie/) |
+| [fzf](https://github.com/junegunn/fzf) | CLI 工具 | 79k+ | [cases/fzf](cases/fzf/) |
+| [rich](https://github.com/Textualize/rich) | Python 库 | 56k+ | [cases/rich](cases/rich/) |
+| [fastapi](https://github.com/fastapi/fastapi) | 框架 | 97k+ | [cases/fastapi](cases/fastapi/) |
+| [lazydocker](https://github.com/jesseduffield/lazydocker) | DevOps 工具 | 50k+ | [cases/lazydocker](cases/lazydocker/) |
+| [glances](https://github.com/nicolargo/glances) | 监控工具 | 32k+ | [cases/glances](cases/glances/) |
 | [paper-checking](https://github.com/CN-big-cabbage/paper-checking) | Web 应用 | - | [cases/paper-checking](cases/paper-checking/) |
 
-> 更多案例持续添加中...使用 `/generate-skill <github-url>` 生成你自己的技能！
+> 使用 `/generate-skill <github-url>` 生成你自己的技能！
 
 ## 项目结构
 
