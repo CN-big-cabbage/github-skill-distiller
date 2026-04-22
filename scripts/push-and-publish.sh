@@ -45,7 +45,10 @@ echo ""
 echo "[3/4] 推送代码..."
 
 if ! git remote get-url origin &>/dev/null; then
-    git remote add origin "https://github.com/$GH_USER/$REPO_NAME.git"
+    git remote add origin "git@github.com:$GH_USER/$REPO_NAME.git"
+else
+    # 确保 remote 使用 SSH 而非 HTTPS
+    git remote set-url origin "git@github.com:$GH_USER/$REPO_NAME.git"
 fi
 
 git push -u origin HEAD
@@ -56,7 +59,9 @@ echo ""
 echo "[4/4] 发布到 ClawHub..."
 
 if command -v clawhub &>/dev/null || command -v clawhub-cli &>/dev/null; then
-    clawhub publish . --slug "$SKILL_NAME" --name "$SKILL_NAME"
+    SKILL_VERSION=$(grep "^version:" "$SKILL_DIR/SKILL.md" | sed 's/^version:[[:space:]]*//' | tr -d '"' | head -1)
+    SKILL_VERSION=${SKILL_VERSION:-"0.1.0"}
+    clawhub publish . --slug "$SKILL_NAME" --version "$SKILL_VERSION"
     echo "  ✅ 已发布到 ClawHub"
     echo "  地址: https://clawhub.ai/skills/$SKILL_NAME"
 else
