@@ -16,6 +16,8 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 ## 全流程
 
+> 完整流程：Phase 1 → Phase 1.5 → Phase 2 → Phase 2.5 → **Phase 3a（评分）→ Phase 3b（修复）→ Phase 3c（决策）** → Phase 4（验证）→ Phase 5（用户确认）→ Phase 6（发布）
+
 ### Phase 1: 项目分析
 
 1. 运行分析脚本：
@@ -108,7 +110,126 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 3. **类型匹配检查**: 确认生成内容是否符合该项目类型的侧重点（参考 Phase 1.5）
 4. **可执行性检查**: 确认每个命令示例是否可以直接复制执行，参数是否完整
 
-### Phase 3: 验证
+### Phase 3a: 结构评分
+
+对 `/tmp/skill-gen-<repo-name>/skill/` 目录执行 6 项检查，计算质量分数。
+
+**评分规则（满分 100）：**
+
+**检查 1 — SKILL.md frontmatter（10 分）**
+读取 SKILL.md，检查开头是否有 `---` 包裹的 frontmatter，且含 `name` 和 `description` 字段。
+→ 满足：+10；不满足：issues 记录 "SKILL.md 缺少 name/description frontmatter"
+
+**检查 2 — 必需段落（20 分）**
+检查 SKILL.md 是否含：描述类段落（含"描述"/"概述"/"介绍"/"Overview"之一的 `##` 标题）、用法类段落（含"用法"/"使用"/"Usage"之一）、示例类段落（含"示例"/"快速"/"Example"之一）。
+→ 3 项全有：+20；缺 1 项：+10；缺 2 项以上：+0；缺失项记入 issues
+
+**检查 3 — guides/ 内容（20 分）**
+检查 guides/ 目录下是否有文件，且最大文件行数 ≥ 100。
+→ 有文件且 ≥ 100 行：+20；有文件但 ≥ 50 行且 < 100 行：+10，issues 记录 "guides/ 文件内容不足 100 行"；无文件：+0，issues 记录 "guides/ 目录为空"
+
+**检查 4 — troubleshooting 条目（20 分）**
+读取 troubleshooting.md，统计 `###` 开头的条目数。
+→ ≥ 3 条：+20；2 条：+10，issues 记录 "troubleshooting 只有 2 条"；< 2 条：+0，issues 记录 "troubleshooting 严重不足"
+特殊情况：如果项目 README < 50 行（极简项目），≥ 2 条即得满分，记录 WARNING 而非 issue。
+
+**检查 5 — 真实命令（15 分）**
+检查 SKILL.md 和 guides/ 中的代码块，不含 `<your-xxx>` / `<placeholder>` / `<repo>` 格式占位符。
+→ 无占位符：+15；有占位符：+0，issues 记录 "示例含 <placeholder> 格式，需替换为真实命令"
+
+**检查 6 — 无冗余占位符文本（15 分）**
+全文搜索纯文本中的未填写标记：`TBD`、`TODO`、`待补充`，以及独立出现（不在 `< >` 尖括号内）的 `xxx`。
+检查 5 已覆盖 `<your-xxx>` 等代码块占位符，本检查仅针对正文叙述性文本中的遗留标记。
+→ 无：+15；有：+0，issues 记录 "发现占位符文本"及其位置
+
+**输出评分结果（在执行 generate-skill 流程时输出）：**
+
+```
+质量评分: {score}/100
+{score >= 70 时显示 "✅ 通过质量门"，否则显示 "❌ 未通过质量门（需修复）"}
+问题列表:
+- {issue 1}
+- {issue 2}
+（无问题时显示"无"）
+```
+
+如果 score ≥ 70，直接跳到 Phase 5（用户确认）。
+如果 score < 70，记录 `iteration = 1`，进入 Phase 3b。
+
+### Phase 3b: AI 定向修复（第 {iteration} 轮）
+
+针对 Phase 3a 输出的每个 issue，执行定向修复，不修改评分已通过的段落：
+
+**issue: "SKILL.md 缺少 name/description frontmatter"**
+→ 在 SKILL.md 文件开头添加：
+```
+---
+name: <从项目名推断，小写连字符格式>
+description: <从项目 GitHub description 字段提取，不超过 80 字>
+version: "0.1.0"
+---
+```
+
+**issue: "SKILL.md 缺少 XX 段落"**
+→ 参考 `cases/you-get/SKILL.md` 中对应段落的结构，结合当前项目信息补写该段落，追加到 SKILL.md 末尾适当位置。
+
+**issue: "guides/ 目录为空" 或 "guides/ 文件内容不足"**
+→ 基于项目 README 和 Phase 1.5 的类型策略，补写或扩充 `guides/01-installation.md`，确保 ≥ 100 行，包含完整安装步骤和至少一条可验证命令（如 `$ tool --version`）。
+
+**issue: "troubleshooting 只有 N 条" 或 "troubleshooting 严重不足"**
+→ 结合 project-profile.json 中的 `project_type`，在 troubleshooting.md 补写问题条目至 ≥ 3 条（极简项目 ≥ 2 条）。每条格式：
+```markdown
+### <问题标题>
+
+**症状**: <描述用户看到的现象>
+
+**解决**:
+```bash
+<修复命令>
+```
+```
+
+**issue: "示例含 <placeholder> 格式"**
+→ 查找所有 `<xxx>` 格式占位符，用项目 README 或文档中的真实值替换；若 README 中无对应真实值则删除该示例行。
+
+**issue: "发现占位符文本"**
+→ 定位所有 TBD/TODO/xxx/待补充 文本并删除；如该位置内容空缺，用项目真实信息填充。
+
+修复完成后，进入 Phase 3c。
+
+### Phase 3c: 重评与决策
+
+重新执行 Phase 3a 的全部 6 项检查，得到新的 score 和 issues。
+
+**决策逻辑：**
+
+- **score ≥ 70**：
+  输出：
+  ```
+  ✅ 质量门通过（第 {iteration} 轮修复后）
+  最终得分: {score}/100
+  ```
+  继续进入 Phase 5（用户确认）。
+
+- **score < 70 且 iteration < 2**：
+  将 iteration 加 1，输出本轮得分，回到 Phase 3b 进行下一轮修复。
+
+- **score < 70 且 iteration = 2（已完成 2 轮修复）**：
+  输出：
+  ```
+  ⚠️  经过 2 轮修复，质量分仍为 {score}/100（未达到 70 分阈值）
+
+  剩余问题：
+  - {issue 1}
+  - {issue 2}
+
+  是否仍要继续发布？(y/n)
+  ```
+  等待用户输入：
+  - 输入 `y`：继续进入 Phase 5（用户确认）
+  - 输入 `n`：终止，输出"已终止。请手动修复上述问题后重新运行 /generate-skill"
+
+### Phase 4: 验证
 
 运行增强版验证脚本：
 ```bash
@@ -117,7 +238,7 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 如果验证失败，自动修复问题后重新验证。
 
-### Phase 4: 用户确认
+### Phase 5: 用户确认
 
 展示生成结果摘要给用户：
 - 列出所有生成的文件及行数
@@ -126,7 +247,7 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 **这是唯一的暂停点。** 等待用户确认后再继续。
 
-### Phase 5: 推送并发布
+### Phase 6: 推送并发布
 
 用户确认后，运行：
 ```bash
