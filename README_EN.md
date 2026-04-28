@@ -21,7 +21,7 @@ Core concept: **Given a GitHub URL, automatically analyze the project, generate 
 - **One-Click Generation**: Input a GitHub URL to automatically analyze and generate a complete skill package
 - **Intelligent Analysis**: Automatically extracts project metadata (stars, language, dependencies, doc structure)
 - **AI-Driven Content Generation**: Generates SKILL.md, guides, and troubleshooting docs based on project documentation
-- **Automated Validation**: Four-dimensional checks — file structure, frontmatter, placeholders, and content quality
+- **Quality Gate**: Automatic 100-point scoring after generation — scores below 70 trigger AI-targeted repairs (up to 2 rounds), ensuring publishable quality every time
 - **Dual-Platform Publishing**: Supports ClawHub + GitHub Marketplace
 - **Multi-Tool Compatible**: Works with Claude Code, Codex, OpenCode, and other AI coding tools
 - **Complete Methodology**: 8 core documents covering the full lifecycle from research to maintenance
@@ -144,7 +144,7 @@ After installing the skill (see [Install the Skill](#install-the-skill)), comple
 /generate-skill https://github.com/user/project
 ```
 
-Automatically: Project Analysis → AI Content Generation → Quality Validation → User Confirmation → Push & Publish
+Automatically: Project Analysis → AI Content Generation → **Quality Gate (score + auto-repair)** → User Confirmation → Push & Publish
 
 ### Option 2: Manual Flow
 
@@ -174,6 +174,8 @@ Refer to the complete case study in the `you-get/` directory and edit the genera
 
 Four-dimensional checks: File Structure → Frontmatter → Placeholders → Content Quality
 
+> When using `/generate-skill`, the **Quality Gate** (Phase 3a/3b/3c) runs automatically: 100-point scoring → AI-targeted repair if score < 70 → re-score, up to 2 repair rounds.
+
 #### 5. Push & Publish (1 min)
 
 ```bash
@@ -188,7 +190,7 @@ Automatically creates a GitHub repository and pushes code. Publishes to ClawHub 
 |-----------|--------------|-------------|
 | Creation Time | 5-6 hours | 20-30 hours |
 | Learning Curve | Rapid iteration | Learn-then-do |
-| Quality Assurance | Automated validation | Manual checks |
+| Quality Assurance | 100-pt gate + AI auto-repair | Manual checks |
 | Platform Coverage | Dual-platform templates | Single-platform |
 | Content Generation | AI-powered | Manual writing |
 
