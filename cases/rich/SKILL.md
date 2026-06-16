@@ -1,7 +1,7 @@
 ---
 name: rich
 description: Rich - Python 终端富文本和美化格式库
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:

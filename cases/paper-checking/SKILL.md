@@ -1,7 +1,7 @@
 ---
 name: paper-checking
 description: 论文查重系统 - 一亿字次级论文库秒级查重，支持纵向查重和横向查重
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:

@@ -1,7 +1,7 @@
 ---
 name: you-get
 description: 网页媒体下载助手 - 从YouTube、Bilibili等网站下载视频、音频、图片
-version: 0.1.0
+version: 0.1.2
 metadata:
   openclaw:
     requires:

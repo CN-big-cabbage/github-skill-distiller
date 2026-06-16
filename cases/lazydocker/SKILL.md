@@ -1,7 +1,7 @@
 ---
 name: lazydocker
 description: lazydocker - Docker 和 Docker Compose 的终端 UI 管理工具
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:

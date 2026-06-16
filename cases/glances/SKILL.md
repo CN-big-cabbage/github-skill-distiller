@@ -1,7 +1,7 @@
 ---
 name: glances
 description: Glances - 跨平台系统监控工具
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:

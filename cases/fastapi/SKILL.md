@@ -1,7 +1,7 @@
 ---
 name: fastapi
 description: FastAPI - 高性能 Python Web API 框架
-version: 0.1.0
+version: 0.1.1
 metadata:
   openclaw:
     requires:
