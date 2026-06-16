@@ -5,8 +5,9 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - fastapi
-      - uvicorn
+      bins:
+        - python
+        - uvicorn
     emoji: ⚡
     homepage: https://fastapi.tiangolo.com
 ---

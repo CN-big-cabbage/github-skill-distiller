@@ -5,7 +5,8 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - httpie
+      bins:
+        - http
     emoji: 🌐
     homepage: https://httpie.io
 ---

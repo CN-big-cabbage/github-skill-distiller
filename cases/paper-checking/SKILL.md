@@ -7,7 +7,6 @@ metadata:
     requires:
       bins:
         - paper_checking.exe
-      primaryEnv: windows
     emoji: "📝"
     homepage: https://github.com/tianlian0/paper_checking_system
 ---

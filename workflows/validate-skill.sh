@@ -35,6 +35,26 @@ if [ -f "$SKILL_DIR/SKILL.md" ]; then
             check_fail "frontmatter 缺少 $field"
         fi
     done
+    
+    # 检查 metadata.openclaw 是否存在
+    if grep -q "metadata:" "$SKILL_DIR/SKILL.md" && grep -q "openclaw:" "$SKILL_DIR/SKILL.md"; then
+        check_pass "frontmatter 包含 metadata.openclaw"
+        
+        # 检查 requires 字段格式（应该是对象，不是数组）
+        # 提取 requires 部分，检查是否包含 bins: 或 env:
+        if grep -A 10 "requires:" "$SKILL_DIR/SKILL.md" | grep -q "bins:\|env:"; then
+            check_pass "metadata.openclaw.requires 格式正确（对象）"
+        else
+            # 检查是否是数组格式（以 - 开头）
+            if grep -A 10 "requires:" "$SKILL_DIR/SKILL.md" | grep -q "^\s*-"; then
+                check_fail "metadata.openclaw.requires 是数组格式，应该是对象（包含 bins: 或 env:）"
+            else
+                check_warn "metadata.openclaw.requires 格式不明确"
+            fi
+        fi
+    else
+        check_warn "frontmatter 缺少 metadata.openclaw（ClawHub 推荐）"
+    fi
 fi
 
 # === 3. 占位符检查 ===

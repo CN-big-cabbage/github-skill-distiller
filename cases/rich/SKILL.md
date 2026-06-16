@@ -5,7 +5,8 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - rich
+      bins:
+        - python
     emoji: 🎨
     homepage: https://rich.readthedocs.io
 ---

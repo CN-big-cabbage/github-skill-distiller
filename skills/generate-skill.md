@@ -66,7 +66,25 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 参考 `cases/you-get/SKILL.md` 的质量标准，生成包含以下内容的 SKILL.md：
 
-- **frontmatter**: name, description, version(0.1.0), metadata(openclaw requires, emoji, homepage)
+- **frontmatter**: 必须包含以下字段，格式严格遵循 ClawHub 规范：
+  ```yaml
+  ---
+  name: <skill-name>
+  description: <技能描述，不超过80字>
+  version: "0.1.0"
+  metadata:
+    openclaw:
+      requires:
+        bins:
+          - <依赖的CLI工具>
+        env:
+          - <需要的环境变量>  # 如果没有则省略此字段
+      primaryEnv: <主要环境变量>  # 如果没有则省略此字段
+      emoji: "<emoji>"
+      homepage: <项目主页URL>
+  ---
+  ```
+  **重要**: `metadata.openclaw.requires` 必须是对象（包含 `bins` 和 `env` 字段），不能是数组。`bins` 和 `env` 都是数组。如果不需要环境变量，可以省略 `env` 和 `primaryEnv` 字段。
 - **技能概述**: 说明技能帮助谁完成什么，列出 3-5 个核心场景
 - **使用流程**: AI 引导的步骤（4-6 步）
 - **关键章节导航**: 链接到 guides/ 和 troubleshooting.md
@@ -117,8 +135,8 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 **评分规则（满分 100）：**
 
 **检查 1 — SKILL.md frontmatter（10 分）**
-读取 SKILL.md，检查开头是否有 `---` 包裹的 frontmatter，且含 `name` 和 `description` 字段。
-→ 满足：+10；不满足：issues 记录 "SKILL.md 缺少 name/description frontmatter"
+读取 SKILL.md，检查开头是否有 `---` 包裹的 frontmatter，且含 `name`、`description` 和 `version` 字段。同时检查是否包含 `metadata.openclaw` 字段，且 `metadata.openclaw.requires` 是对象（包含 `bins` 或 `env` 字段），而不是数组。
+→ 满足：+10；不满足：issues 记录 "SKILL.md frontmatter 格式不符合 ClawHub 要求"
 
 **检查 2 — 必需段落（20 分）**
 检查 SKILL.md 是否含：描述类段落（含"描述"/"概述"/"介绍"/"Overview"之一的 `##` 标题）、用法类段落（含"用法"/"使用"/"Usage"之一）、示例类段落（含"示例"/"快速"/"Example"之一）。
@@ -160,15 +178,24 @@ description: 从 GitHub URL 自动生成技能并发布。使用方法：/genera
 
 针对 Phase 3a 输出的每个 issue，执行定向修复，不修改评分已通过的段落：
 
-**issue: "SKILL.md 缺少 name/description frontmatter"**
-→ 在 SKILL.md 文件开头添加：
+**issue: "SKILL.md frontmatter 格式不符合 ClawHub 要求"**
+→ 在 SKILL.md 文件开头添加或修正 frontmatter，确保符合 ClawHub 格式：
 ```
 ---
 name: <从项目名推断，小写连字符格式>
 description: <从项目 GitHub description 字段提取，不超过 80 字>
 version: "0.1.0"
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - <依赖的CLI工具>
+        - <另一个依赖>
+    emoji: "<合适的emoji>"
+    homepage: <项目主页URL>
 ---
 ```
+**重要**: `metadata.openclaw.requires` 必须是对象（包含 `bins` 和 `env` 字段），不能是数组。如果不需要环境变量，可以省略 `env` 字段。
 
 **issue: "SKILL.md 缺少 XX 段落"**
 → 参考 `cases/you-get/SKILL.md` 中对应段落的结构，结合当前项目信息补写该段落，追加到 SKILL.md 末尾适当位置。

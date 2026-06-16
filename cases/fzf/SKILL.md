@@ -5,7 +5,8 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - fzf
+      bins:
+        - fzf
     emoji: 🔍
     homepage: https://github.com/junegunn/fzf
 ---

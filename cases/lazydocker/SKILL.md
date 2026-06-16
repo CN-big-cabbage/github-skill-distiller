@@ -5,7 +5,9 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - docker
+      bins:
+        - docker
+        - lazydocker
     emoji: 🐳
     homepage: https://github.com/jesseduffield/lazydocker
 ---

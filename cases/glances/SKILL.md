@@ -5,7 +5,8 @@ version: 0.1.0
 metadata:
   openclaw:
     requires:
-      - glances
+      bins:
+        - glances
     emoji: 📊
     homepage: https://nicolargo.github.io/glances/
 ---

@@ -9,7 +9,6 @@ metadata:
         - python
         - you-get
         - ffmpeg
-      primaryEnv: python
     emoji: "⬇️"
     homepage: https://github.com/soimort/you-get
 ---
